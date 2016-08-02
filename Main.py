@@ -2,4 +2,4 @@ from Board import Board
 
 board = Board()
 
-print(board.world)
+board.print_world()

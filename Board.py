@@ -1,12 +1,12 @@
-#-------------------------------------------------------------#
-# Author: Joseph Santantasio       							  #	
-# Project 1: Conway's Game of Life 							  #
-# Class: Board					   							  #
-# Created On: 8/1/2016             							  #
-# Description: The board on which the game will be played,    #
-#              controls how fast the steps are, the starting  #
-#			   seed for the board and the rules of the game   #
-#-------------------------------------------------------------#
+#--------------------------------------------------------------------#
+# Author: Joseph Santantasio       				     #			              	
+# Project 1: Conway's Game of Life 				     #		          
+# Class: Board					   		     #
+# Created On: 8/1/2016             				     #			              
+# Description: The board on which the game will be played,           #
+#              controls how fast the steps are, the starting         #
+#	       seed for the board and the rules of the game          #
+#--------------------------------------------------------------------#
 
 class Board:
 
@@ -27,6 +27,9 @@ class Board:
 		return [([0] * self.rows)] * self.columns
 
 	def print_world(self):
-		"""TO-DO Prints the board in its current configuration"""
+                """Prints the current world configuration"""
 
-
+                for row in self.world:
+                        for cell in row:
+                                print(cell, end=' ')
+                        print()
