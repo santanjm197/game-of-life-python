@@ -8,28 +8,35 @@
 #	       seed for the board and the rules of the game          #
 #--------------------------------------------------------------------#
 
+from Cell import Cell
+
 class Board:
 
-	def __init__(self):
-		"""Default constructor for the Board class, creates a 10x10 board"""
+    def __init__(self):
+        """Default constructor for the Board class, creates a 10x10 board"""
+        # Set the height of width of the board
+        self.rows = 10
+        self.columns = 10
 
-		# Set the height of width of the board
-		self.rows = 10
-		self.columns = 10
-
-		# Construct the game world
-		self.world = self.construct_world()
+        # Construct the game world
+        self.construct_world()
 
 
-	def construct_world(self):
-		"""Construct and return the game world based on a given height and width"""
+    def construct_world(self):
+        """Construct and return the game world based on a given height and width"""
+        # Initialize the world with the right number of rows
+        self.world = [0] * self.rows
 
-		return [([0] * self.rows)] * self.columns
+        for i in range(self.rows):
+            # Initialize each row with the right number of columns
+            self.world[i] = [0] * self.columns
+            for j in range(self.columns):
+                self.world[i][j] = Cell(i, j)
+            
 
-	def print_world(self):
-                """Prints the current world configuration"""
-
-                for row in self.world:
-                        for cell in row:
-                                print(cell, end=' ')
-                        print()
+    def print_world(self):
+        """Prints the current world configuration"""
+        for row in self.world:
+            for cell in row:
+                print(cell.state, end=' ')
+            print()
