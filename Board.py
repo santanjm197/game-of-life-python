@@ -7,6 +7,7 @@
 
 from Cell import Cell
 from time import sleep
+from copy import deepcopy, copy
 
 class Board:
     """The board on which the game will be played, controls how fast the steps are,
@@ -15,8 +16,8 @@ class Board:
     def __init__(self):
         """Default constructor for the Board class, creates a 10x10 board"""
         # Set the height of width of the board
-        self.rows = 4
-        self.columns = 4
+        self.rows = 15
+        self.columns = 15
 
         # Construct the game world
         self.construct_world()
@@ -33,6 +34,41 @@ class Board:
             for j in range(self.columns):
                 self.world[i][j] = Cell(i, j, self.rows, self.columns)
             
+        self.set_seed()
+        
+    def set_seed(self):
+        """TO-DO Sets the starting seed for the world (which cells are alive)"""
+        self.world[2][1].state = 1
+        self.world[2][2].state = 1
+        self.world[3][2].state = 1
+        self.world[1][2].state = 1
+        self.world[1][3].state = 1
+        
+        # Begin the simulation
+        self.game_loop()
+        
+    def game_loop(self):
+        """The main loop of the simulation"""
+        for n in range(8):
+            self.print_world()
+            
+            # Temp variable that will be altered
+            temp_world = deepcopy(self.world)
+            
+            # Now we need to update each Cell with this new world configuration
+            for i in range(len(self.world)):
+                for j in range(len(self.world[i])):
+                    temp_world[i][j].state = temp_world[i][j].update_state(self.world)
+                
+            self.world = deepcopy(temp_world)
+        
+        
+        # Now we need to update each Cell with this new world configuration
+        for i in range(len(self.world)):
+            for j in range(len(self.world[i])):
+                temp_world[i][j].state = temp_world[i][j].update_state(self.world)
+            
+
 
     def print_world(self):
         """Prints the current world configuration"""
@@ -40,13 +76,4 @@ class Board:
             for cell in row:
                 print(cell.state, end=' ')
             print()
-
-    def print_cells(self):
-        """Test method to print some cells' neighbor coordinates"""
-        self.world[1][1].print_neighbors()
         print()
-        self.world[1][2].print_neighbors()
-        print()
-        self.world[2][1].print_neighbors()
-        print()
-        self.world[2][2].print_neighbors()

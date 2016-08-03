@@ -27,19 +27,25 @@ class Cell:
         if self.rows != 0 and self.columns != 0:
             self.find_neighbors()
 
-    def cycle(self):
-        """TO-DO Method which implements the rules of Conway's Game of Life for a cell"""
 
-    def update_world(self, update):
-        """TO-DO Updates the current board configuration"""
-        self.world = update
-    
-    
     #-------------------------#
     #                         #
     #     Update Methods      #
     #                         #
     #-------------------------#
+    
+    def update_state(self, update):
+        """TO-DO Updates the current board configuration"""
+        self.world = update
+        # Update the states of this Cell's neighbors based on the new world setup
+        for i in range(len(self.neighbors)):
+            self.neighbors[i].state = self.world[self.neighbors[i].x][self.neighbors[i].y].state
+        
+        # Use this new information to decide how to change on the next cycle
+        self.check_rules()
+        
+        # Now return this Cell's (possibly) changed state
+        return self.state
     
     def check_rules(self):
         """TO-DO Checks which rules of the game apply to this cell on this frame
@@ -60,6 +66,7 @@ class Cell:
             if alive == 3:
                 # Cell comes back to life
                 self.state = 1
+    
     
     #-------------------------#
     #                         #
