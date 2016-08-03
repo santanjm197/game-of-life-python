@@ -61,14 +61,6 @@ class Board:
                     temp_world[i][j].state = temp_world[i][j].update_state(self.world)
                 
             self.world = deepcopy(temp_world)
-        
-        
-        # Now we need to update each Cell with this new world configuration
-        for i in range(len(self.world)):
-            for j in range(len(self.world[i])):
-                temp_world[i][j].state = temp_world[i][j].update_state(self.world)
-            
-
 
     def print_world(self):
         """Prints the current world configuration"""
