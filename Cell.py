@@ -11,7 +11,7 @@ class Cell:
         
     def __init__(self, x, y, rows=0, columns=0):
         """Construct a Cell with coordinates and the size of the world"""
-        # The coordinate for this cell in world
+        # The coordinate for this cell in the world
         self.x = x
         self.y = y
         self.coordinates = (x, y)
@@ -26,9 +26,49 @@ class Cell:
         # Create a list of all of this cell's neighbors based on its coordinates
         if self.rows != 0 and self.columns != 0:
             self.find_neighbors()
-        
+
+    def cycle(self):
+        """TO-DO Method which implements the rules of Conway's Game of Life for a cell"""
+
+    def update_world(self, update):
+        """TO-DO Updates the current board configuration"""
+        self.world = update
+    
+    
+    #-------------------------#
+    #                         #
+    #     Update Methods      #
+    #                         #
+    #-------------------------#
+    
+    def check_rules(self):
+        """TO-DO Checks which rules of the game apply to this cell on this frame
+           and then updates its state accordingly"""
+           
+        # Count living neighbors
+        alive = 0
+        for cell in self.neighbors:
+            if cell.state == 1:
+                alive = alive + 1
+                
+        # Is this Cell alive or dead currently?
+        if self.state == 1:
+            if alive < 2 or alive > 3:
+                # Cell dies from under or over population
+                self.state = 0
+        else:
+            if alive == 3:
+                # Cell comes back to life
+                self.state = 1
+    
+    #-------------------------#
+    #                         #
+    #    Neighbors Methods    #
+    #                         #
+    #-------------------------#
+    
     def find_neighbors(self):
-        """TO-DO Create a list of the neighbors of this cell"""
+        """Create a list of the neighbors of this cell"""
         self.neighbors = []
         
         # Check to see if this Cell is a corner
@@ -143,4 +183,3 @@ class Cell:
                 return False
         else:
             return False
-        

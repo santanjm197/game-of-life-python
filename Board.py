@@ -1,8 +1,8 @@
 #--------------------------------------------------------------------#
-# Author: Joseph Santantasio       				     #			              	
-# Project 1: Conway's Game of Life 				     #		          
-# Class: Board					   		     #
-# Created On: 8/1/2016             				     #			              
+# Author: Joseph Santantasio       				     			     #             	
+# Project 1: Conway's Game of Life 				                     #		          
+# Class: Board					   		                             #
+# Created On: 8/1/2016             				                     #			              
 #--------------------------------------------------------------------#
 
 from Cell import Cell
