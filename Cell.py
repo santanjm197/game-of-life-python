@@ -112,18 +112,22 @@ class Cell:
 
     def calc_neighbors_corner(self, location):
         """Calculate the neighbors of a corner cell"""
+        # top-left corner
         if location == 'tl':
             self.neighbors[(self.x, self.y+1)] = 0
             self.neighbors[(self.x+1, self.y)] = 0
             self.neighbors[(self.x+1, self.y+1)] = 0
+        # top-right corner
         elif location == 'tr':
             self.neighbors[(self.x, self.y-1)] = 0
             self.neighbors[(self.x+1, self.y)] = 0
             self.neighbors[(self.x+1, self.y-1)] = 0
+        # bottom-left corner
         elif location == 'bl':
             self.neighbors[(self.x-1, self.y)] = 0
             self.neighbors[(self.x-1, self.y+1)] = 0
             self.neighbors[(self.x, self.y+1)] = 0
+        # bottom-left corner
         else:
             self.neighbors[(self.x-1, self.y)] = 0
             self.neighbors[(self.x-1, self.y-1)] = 0
@@ -131,24 +135,28 @@ class Cell:
 
     def calc_neighbors_edge(self, location):
         """Calculate the neighbors of an edge cell"""
+        # left edge
         if location == 'le':
             self.neighbors[(self.x-1, self.y)] = 0
             self.neighbors[(self.x-1, self.y+1)] = 0
             self.neighbors[(self.x, self.y+1)] = 0
             self.neighbors[(self.x+1, self.y)] = 0
             self.neighbors[(self.x+1, self.y+1)] = 0
+        # right edge
         elif location == 're':
             self.neighbors[(self.x-1, self.y)] = 0
             self.neighbors[(self.x-1, self.y-1)] = 0
             self.neighbors[(self.x, self.y-1)] = 0
             self.neighbors[(self.x+1, self.y)] = 0
             self.neighbors[(self.x+1, self.y-1)] = 0
+        # top edge
         elif location == 'te':
             self.neighbors[(self.x, self.y-1)] = 0
             self.neighbors[(self.x, self.y+1)] = 0
             self.neighbors[(self.x+1, self.y-1)] = 0
             self.neighbors[(self.x+1, self.y)] = 0
             self.neighbors[(self.x+1, self.y+1)] = 0
+        # bottom edge
         else:
             self.neighbors[(self.x, self.y-1)] = 0
             self.neighbors[(self.x, self.y+1)] = 0
@@ -176,16 +184,16 @@ class Cell:
         """Return True if this Cell is in a corner and False otherwise"""
         if self.x == 0:
             if self.y == 0:
-                return 'tl'
+                return 'tl' # top-left corner
             elif self.y == self.columns - 1:
-                return 'tr'
+                return 'tr' # top-right corner
             else:
                 return False
         elif self.x == self.rows - 1:
             if self.y == 0:
-                return 'bl'
+                return 'bl' # bottom-left corner
             elif self.y == self.columns - 1:
-                return 'br'
+                return 'br' # bottom-right corner
             else:
                 return False
         else:
@@ -195,19 +203,19 @@ class Cell:
         """Return True if this Cell is on an edge and False otherwise"""
         if self.x > 0 and self.x < self.rows - 1:
             if self.y == 0:
-                return 'le'
+                return 'le' # left edge
             elif self.y == self.columns - 1:
-                return 're'
+                return 're' # right edge
             else:
                 return False
         elif self.x == 0:
             if self.y > 0 and self.y < self.columns - 1:
-                return 'te'
+                return 'te' # top edge
             else:
                 return False
         elif self.x == self.rows - 1:
             if self.y > 0 and self.y < self.columns - 1:
-                return 'be'
+                return 'be' # bottom edge
             else:
                 return False
         else:
