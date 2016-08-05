@@ -1,15 +1,17 @@
 #--------------------------------------------------------------------#
-# Author: Joseph Santantasio       				     #			              	
-# Project 1: Conway's Game of Life 				     #			          
-# Class: Cell					   		     #					                          
-# Created On: 8/1/2016             				     #			              
+# Author: Joseph Santantasio       				     			     #         	
+# Project 1: Conway's Game of Life 				     			     #     
+# Class: Cell                                                        #
+# Created On: 8/1/2016             				                     #
 #--------------------------------------------------------------------#
+
+from tkinter import *
 
 class Cell:
     """A cell which will know its coordinates as well as well as its
        current state (alive or dead)"""
         
-    def __init__(self, x, y, rows=0, columns=0):
+    def __init__(self, x, y, rows=0, columns=0, window=None):
         """Construct a Cell with coordinates and the size of the world"""
         # The coordinate for this cell in the world
         self.x = x
@@ -19,6 +21,9 @@ class Cell:
         # The number of rows and columns in the game world
         self.rows = rows
         self.columns = columns
+        
+        # The window that this Cell's canvas will be attached to
+        self.window = window
 
         # The current state for this cell (0 = dead, 1 = alive)
         self.state = 0
@@ -26,7 +31,12 @@ class Cell:
         # Create a list of all of this cell's neighbors based on its coordinates
         if self.rows != 0 and self.columns != 0:
             self.find_neighbors()
-
+            
+            # Create this Cell's canvas and place it in its parent window in
+            # a grid; its row and column will be simply its x and y coordinates
+            self.canvas = Canvas(self.window, height=50, width=50,
+                                 bg='blue', relief=RIDGE)
+            self.canvas.grid(row=self.x, column=self.y)
 
     #-------------------------#
     #                         #
@@ -35,26 +45,33 @@ class Cell:
     #-------------------------#
     
     def update_state(self, update):
-        """TO-DO Updates the current board configuration"""
-        self.world = update
+        """Updates the current board configuration"""
         # Update the states of this Cell's neighbors based on the new world setup
-        for i in range(len(self.neighbors)):
-            self.neighbors[i].state = self.world[self.neighbors[i].x][self.neighbors[i].y].state
+        for coords in self.neighbors.keys():
+            self.neighbors[coords] = update[coords]
         
         # Use this new information to decide how to change on the next cycle
         self.check_rules()
+        
+        # Change the color of this cell on the board:
+        # Blue = dead, Red = alive
+        if self.state == 0:
+            self.canvas.config(bg='blue')
+        else:
+            self.canvas.config(bg='red')
+            
         
         # Now return this Cell's (possibly) changed state
         return self.state
     
     def check_rules(self):
-        """TO-DO Checks which rules of the game apply to this cell on this frame
+        """Checks which rules of the game apply to this cell on this frame
            and then updates its state accordingly"""
            
         # Count living neighbors
         alive = 0
-        for cell in self.neighbors:
-            if cell.state == 1:
+        for neighbor in dict.keys(self.neighbors):
+            if self.neighbors[neighbor] == 1:
                 alive = alive + 1
                 
         # Is this Cell alive or dead currently?
@@ -76,7 +93,7 @@ class Cell:
     
     def find_neighbors(self):
         """Create a list of the neighbors of this cell"""
-        self.neighbors = []
+        self.neighbors = {}
         
         # Check to see if this Cell is a corner
         location = self.is_corner()
@@ -96,59 +113,64 @@ class Cell:
     def calc_neighbors_corner(self, location):
         """Calculate the neighbors of a corner cell"""
         if location == 'tl':
-            self.neighbors.extend([Cell(self.x, self.y+1), Cell(self.x+1, self.y),
-                                   Cell(self.x+1, self.y+1)])
+            self.neighbors[(self.x, self.y+1)] = 0
+            self.neighbors[(self.x+1, self.y)] = 0
+            self.neighbors[(self.x+1, self.y+1)] = 0
         elif location == 'tr':
-            self.neighbors.extend([Cell(self.x, self.y-1), Cell(self.x+1, self.y),
-                                   Cell(self.x+1, self.y-1)])
+            self.neighbors[(self.x, self.y-1)] = 0
+            self.neighbors[(self.x+1, self.y)] = 0
+            self.neighbors[(self.x+1, self.y-1)] = 0
         elif location == 'bl':
-            self.neighbors.extend([Cell(self.x-1, self.y), Cell(self.x-1, self.y+1),
-                                   Cell(self.x, self.y+1)])
+            self.neighbors[(self.x-1, self.y)] = 0
+            self.neighbors[(self.x-1, self.y+1)] = 0
+            self.neighbors[(self.x, self.y+1)] = 0
         else:
-             self.neighbors.extend([Cell(self.x-1, self.y), Cell(self.x-1, self.y-1),
-                                   Cell(self.x, self.y-1)])
+            self.neighbors[(self.x-1, self.y)] = 0
+            self.neighbors[(self.x-1, self.y-1)] = 0
+            self.neighbors[(self.x, self.y-1)] = 0
 
     def calc_neighbors_edge(self, location):
         """Calculate the neighbors of an edge cell"""
         if location == 'le':
-            self.neighbors.extend([Cell(self.x-1, self.y), Cell(self.x-1, self.y+1),
-                                   Cell(self.x, self.y+1),
-                                   Cell(self.x+1, self.y), Cell(self.x+1, self.y+1)])
+            self.neighbors[(self.x-1, self.y)] = 0
+            self.neighbors[(self.x-1, self.y+1)] = 0
+            self.neighbors[(self.x, self.y+1)] = 0
+            self.neighbors[(self.x+1, self.y)] = 0
+            self.neighbors[(self.x+1, self.y+1)] = 0
         elif location == 're':
-            self.neighbors.extend([Cell(self.x-1, self.y), Cell(self.x-1, self.y-1),
-                                   Cell(self.x, self.y-1),
-                                   Cell(self.x+1, self.y), Cell(self.x+1, self.y-1)])
+            self.neighbors[(self.x-1, self.y)] = 0
+            self.neighbors[(self.x-1, self.y-1)] = 0
+            self.neighbors[(self.x, self.y-1)] = 0
+            self.neighbors[(self.x+1, self.y)] = 0
+            self.neighbors[(self.x+1, self.y-1)] = 0
         elif location == 'te':
-            self.neighbors.extend([Cell(self.x, self.y-1), Cell(self.x, self.y+1),
-                                   Cell(self.x+1, self.y-1), Cell(self.x+1, self.y),
-                                   Cell(self.x+1, self.y+1)])
+            self.neighbors[(self.x, self.y-1)] = 0
+            self.neighbors[(self.x, self.y+1)] = 0
+            self.neighbors[(self.x+1, self.y-1)] = 0
+            self.neighbors[(self.x+1, self.y)] = 0
+            self.neighbors[(self.x+1, self.y+1)] = 0
         else:
-            self.neighbors.extend([Cell(self.x, self.y-1), Cell(self.x, self.y+1),
-                                   Cell(self.x-1, self.y-1), Cell(self.x-1, self.y),
-                                   Cell(self.x-1, self.y+1)])
+            self.neighbors[(self.x, self.y-1)] = 0
+            self.neighbors[(self.x, self.y+1)] = 0
+            self.neighbors[(self.x-1, self.y-1)] = 0
+            self.neighbors[(self.x-1, self.y)] = 0
+            self.neighbors[(self.x-1, self.y+1)] = 0
 
     def calc_neighbors_interior(self):
         """Calculate the neighbors of an interior cell"""
         # Cells to this Cell's left and right
-        self.neighbors.extend([Cell(self.x, self.y-1), Cell(self.x, self.y+1)])
+        self.neighbors[(self.x, self.y-1)] = 0
+        self.neighbors[(self.x, self.y+1)] = 0
 
         # Cells in the row above this Cell
-        self.neighbors.extend([Cell(self.x-1, self.y), Cell(self.x-1, self.y-1),
-                          Cell(self.x-1, self.y+1)])
+        self.neighbors[(self.x-1, self.y)] = 0
+        self.neighbors[(self.x-1, self.y-1)] = 0
+        self.neighbors[(self.x-1, self.y+1)] = 0
 
         # Cells in the row below this Cell
-        self.neighbors.extend([Cell(self.x+1, self.y), Cell(self.x+1, self.y-1),
-                          Cell(self.x+1, self.y+1)])
-        
-    def print_neighbors(self):
-        """Print the coordinates of all of this Cell's neighbor cells"""
-        print("This Cell: %s" % str(self.coordinates))
-        location = self.is_corner()
-        print("Is a corner? %s" % str(location))
-        location = self.is_edge()
-        print("Is an edge? %s" % str(location)) 
-        for i in range(len(self.neighbors)):
-            print(str(self.neighbors[i].coordinates))
+        self.neighbors[(self.x+1, self.y)] = 0
+        self.neighbors[(self.x+1, self.y-1)] = 0
+        self.neighbors[(self.x+1, self.y+1)] = 0
     
     def is_corner(self):
         """Return True if this Cell is in a corner and False otherwise"""
