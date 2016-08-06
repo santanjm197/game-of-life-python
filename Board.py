@@ -10,16 +10,17 @@ from Cell import Cell
 from time import sleep
 from copy import deepcopy, copy
 from tkinter import *
+import random
 
 class Board():
     """The board on which the game will be played, controls how fast the steps are,
        the starting seed for the board and the rules of the game"""
     
-    def __init__(self):
+    def __init__(self, rows, columns):
         """Default constructor for the Board class, creates a 10x10 board"""
         # Set the height of width of the board
-        self.rows = 10
-        self.columns = 10 
+        self.rows = rows
+        self.columns = columns
         
         # Create the window on which the simulation will be displayed
         self.window = Board_GUI(Tk())
@@ -56,15 +57,18 @@ class Board():
     def set_seed(self):
         """TO-DO Sets the starting seed for the world (which cells are alive)"""
         # This is a 'glider' pattern at the moment
-        self.world[0][1].state = 1
-        self.world[0][3].state = 1
-        self.world[1][2].state = 1
-        self.world[1][3].state = 1
-        self.world[2][2].state = 1
+        for i in range(500):
+            x = random.randrange(0, len(self.world) - 1)
+            y = random.randrange(0, len(self.world) - 1)
+            self.live(x, y)
+        
         
         # Begin the simulation
         self.game_loop()
         
+        
+    def live(self, x, y):
+        self.world[x][y].state = 1
         
     #-----------------------------#
     #                             #

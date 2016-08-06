@@ -1,4 +1,6 @@
 from Board import Board
 from Board_GUI import Board_GUI
 
-board = Board()
+dimension = int(input("How big do you want the world to be? "))
+
+board = Board(dimension, dimension)

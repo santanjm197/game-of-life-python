@@ -28,15 +28,19 @@ class Cell:
         # The current state for this cell (0 = dead, 1 = alive)
         self.state = 0
         
+        # Counter for how many cycles this Cell has stayed alive
+        self.living_cycles = 0
+        
         # Create a list of all of this cell's neighbors based on its coordinates
         if self.rows != 0 and self.columns != 0:
             self.find_neighbors()
             
             # Create this Cell's canvas and place it in its parent window in
             # a grid; its row and column will be simply its x and y coordinates
-            self.canvas = Canvas(self.window, height=50, width=50,
-                                 bg='blue', relief=RIDGE)
+            self.canvas = Canvas(self.window, height=20, width=20,
+                                 bg='black', relief=RIDGE)
             self.canvas.grid(row=self.x, column=self.y)
+            
 
     #-------------------------#
     #                         #
@@ -56,9 +60,16 @@ class Cell:
         # Change the color of this cell on the board:
         # Blue = dead, Red = alive
         if self.state == 0:
-            self.canvas.config(bg='blue')
+            self.canvas.config(bg='gray')
         else:
-            self.canvas.config(bg='red')
+            if self.living_cycles >= 2 and  self.living_cycles < 5:
+                self.canvas.config(bg='magenta')
+            elif self.living_cycles >= 5 and self.living_cycles < 20:
+                self.canvas.config(bg='green')
+            elif self.living_cycles >= 20:
+                self.canvas.config(bg='black')
+            else:
+                self.canvas.config(bg='cyan')
             
         
         # Now return this Cell's (possibly) changed state
@@ -79,6 +90,9 @@ class Cell:
             if alive < 2 or alive > 3:
                 # Cell dies from under or over population
                 self.state = 0
+                self.living_cycles = 0
+            else:
+                self.living_cycles = self.living_cycles + 1
         else:
             if alive == 3:
                 # Cell comes back to life
