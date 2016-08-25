@@ -31,6 +31,9 @@ class Cell:
         # Counter for how many cycles this Cell has stayed alive
         self.living_cycles = 0
         
+        # Counter for how many cycles this cell has stayed dead
+        self.dead_cycles = 0
+        
         # Create a list of all of this cell's neighbors based on its coordinates
         if self.rows != 0 and self.columns != 0:
             self.find_neighbors()
@@ -58,16 +61,18 @@ class Cell:
         self.check_rules()
         
         # Change the color of this cell on the board:
-        # Blue = dead, Red = alive
         if self.state == 0:
-            self.canvas.config(bg='gray')
+            if self.dead_cycles < 25:
+                self.canvas.config(bg='gray')
+            else:
+                self.canvas.config(bg='black')
         else:
             if self.living_cycles >= 2 and  self.living_cycles < 5:
                 self.canvas.config(bg='magenta')
             elif self.living_cycles >= 5 and self.living_cycles < 20:
                 self.canvas.config(bg='green')
             elif self.living_cycles >= 20:
-                self.canvas.config(bg='black')
+                self.canvas.config(bg='yellow')
             else:
                 self.canvas.config(bg='cyan')
             
@@ -97,6 +102,9 @@ class Cell:
             if alive == 3:
                 # Cell comes back to life
                 self.state = 1
+                self.dead_cycles = 0
+            else:
+                self.dead_cycles = self.dead_cycles + 1
     
     
     #-------------------------#
