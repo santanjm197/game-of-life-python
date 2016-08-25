@@ -7,10 +7,8 @@
 
 from Board_GUI import Board_GUI
 from Cell import Cell
-from time import sleep
-#from copy import deepcopy, copy
+from time import sleep, time
 from tkinter import *
-from time import time
 import random
 from math import floor
 
@@ -23,14 +21,6 @@ class Board():
         # Set the height of width of the board
         self.rows = rows
         self.columns = columns
-        
-        # The smallest number of cycles that any currently dead cell 
-        # has been dead
-        self.min_dead_cycles = 0
-        
-        # The smallest number of cycles that any currently living cell 
-        # has been alive
-        self.min_living_cycles = 0
               
         # Create the window on which the simulation will be displayed
         self.window = Board_GUI(Tk())
